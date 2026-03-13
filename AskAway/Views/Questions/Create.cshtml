@@ -1,0 +1,283 @@
+﻿@model AskAway.Models.Question
+
+@{
+    ViewData["Title"] = "Create Question";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/lobby.css">
+    <style>
+        .form-container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            padding: 40px 20px;
+        }
+
+        .form-content-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 45px 55px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            width: 100%;
+            max-width: 750px;
+            animation: slideUp 0.6s ease;
+        }
+
+        .form-title {
+            text-align: center;
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: #fff;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .form-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 35px;
+            font-weight: 300;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+            .form-label .icon {
+                margin-right: 8px;
+            }
+
+        textarea.game-input {
+            min-height: 120px;
+            resize: vertical;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .options-section {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .options-header {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .option-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .option-badge {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: #fff;
+            font-weight: 900;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            box-shadow: 0 3px 10px rgba(240, 147, 251, 0.3);
+        }
+
+        .option-input {
+            flex: 1;
+        }
+
+        .form-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .validation-message {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        @@media (max-width: 768px) {
+            .form-content-card {
+                padding: 30px 25px;
+            }
+
+            .form-title {
+                font-size: 2rem;
+            }
+
+            .option-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .option-badge {
+                width: 100%;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <!-- Animated Background -->
+        <div class="background-pattern"></div>
+
+        <div class="form-content-card">
+            <h1 class="form-title">
+                <span>✨</span>
+                Create Question
+            </h1>
+            <p class="form-subtitle">Design an exciting question for your party game!</p>
+
+            <form asp-action="Create" method="post">
+                <!-- Question Text -->
+                <div class="form-group">
+                    <label asp-for="Text" class="form-label">
+                        <span class="icon">❓</span>
+                        Question Text
+                    </label>
+                    <textarea asp-for="Text"
+                              class="game-input"
+                              placeholder="e.g., If [Player Name] were stranded on a deserted island, what would they bring?"
+                              required></textarea>
+                    <span asp-validation-for="Text" class="validation-message"></span>
+                </div>
+
+                <!-- Options Section -->
+                <div class="options-section">
+                    <div class="options-header">
+                        <span>🎯</span>
+                        Answer Options
+                    </div>
+
+                    <!-- Option A -->
+                    <div class="option-group">
+                        <div class="option-badge">A</div>
+                        <div class="option-input">
+                            <input asp-for="OptionA"
+                                   class="game-input"
+                                   placeholder="Enter option A"
+                                   required />
+                            <span asp-validation-for="OptionA" class="validation-message"></span>
+                        </div>
+                    </div>
+
+                    <!-- Option B -->
+                    <div class="option-group">
+                        <div class="option-badge">B</div>
+                        <div class="option-input">
+                            <input asp-for="OptionB"
+                                   class="game-input"
+                                   placeholder="Enter option B"
+                                   required />
+                            <span asp-validation-for="OptionB" class="validation-message"></span>
+                        </div>
+                    </div>
+
+                    <!-- Option C -->
+                    <div class="option-group">
+                        <div class="option-badge">C</div>
+                        <div class="option-input">
+                            <input asp-for="OptionC"
+                                   class="game-input"
+                                   placeholder="Enter option C"
+                                   required />
+                            <span asp-validation-for="OptionC" class="validation-message"></span>
+                        </div>
+                    </div>
+
+                    <!-- Option D -->
+                    <div class="option-group">
+                        <div class="option-badge">D</div>
+                        <div class="option-input">
+                            <input asp-for="OptionD"
+                                   class="game-input"
+                                   placeholder="Enter option D"
+                                   required />
+                            <span asp-validation-for="OptionD" class="validation-message"></span>
+                        </div>
+                    </div>
+
+                    <!-- Option E -->
+                    <div class="option-group">
+                        <div class="option-badge">E</div>
+                        <div class="option-input">
+                            <input asp-for="OptionE"
+                                   class="game-input"
+                                   placeholder="Enter option E"
+                                   required />
+                            <span asp-validation-for="OptionE" class="validation-message"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="submit" class="game-btn btn-primary-game">
+                        <span class="btn-icon">💾</span>
+                        Save Question
+                    </button>
+                    <a asp-action="Index" class="game-btn btn-back">
+                        <span class="btn-icon">←</span>
+                        Back to Question Bank
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+</body>
+</html>

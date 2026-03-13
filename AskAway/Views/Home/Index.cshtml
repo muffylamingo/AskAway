@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Ask Away - Party Game";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/lobby.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="background-pattern"></div>
+
+        <div id="welcomeScreen" class="screen active">
+            <div class="content-card">
+                <h1 class="game-title">
+                    <span class="title-word">Ask</span>
+                    <span class="title-word">Away!</span>
+                </h1>
+                <div class="input-group-custom">
+                    <input type="text" id="playerName" class="game-input" placeholder="Enter Your Name" maxlength="20">
+                </div>
+                <div class="button-group">
+                    <button id="createRoomBtn" class="game-btn btn-primary-game">🎮 Create Room</button>
+                    <button id="joinRoomBtn" class="game-btn btn-secondary-game">🚪 Join Room</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="joinScreen" class="screen">
+            <div class="content-card">
+                <h2 class="screen-title">Join the Fun!</h2>
+                <div class="input-group-custom">
+                    <input type="text" id="joinPlayerName" class="game-input" placeholder="Enter Your Name">
+                </div>
+                <div class="input-group-custom">
+                    <input type="text" id="roomCode" class="game-input room-code-input" placeholder="4-Digit Code" maxlength="4">
+                </div>
+                <div class="button-group">
+                    <button id="confirmJoinBtn" class="game-btn btn-primary-game">✓ Confirm</button>
+                    <button id="backToWelcomeBtn" class="game-btn btn-back">← Back</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="lobbyScreen" class="screen">
+            <div class="content-card lobby-card">
+                <div class="room-code-display">
+                    <span id="displayRoomCode" class="room-code-value">----</span>
+                </div>
+                <ul id="playersList" class="players-list"></ul>
+                <div class="lobby-actions">
+                    <button id="startGameBtn" class="game-btn btn-start" style="display: none;">🎯 Start Game</button>
+                    <button id="leaveLobbyBtn" class="game-btn btn-leave">🚪 Leave</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="gameScreen" class="screen">
+            <div class="content-card game-card">
+                <div class="king-indicator">👑 <span id="currentKingName">...</span></div>
+                <div class="timer-container"><div id="timerProgress" class="timer-progress"></div></div>
+                <h2 id="questionText" class="question-text">Soru Yükleniyor...</h2>
+                <div class="options-container">
+                    <button class="option-btn" data-option="A"><span class="option-text"></span></button>
+                    <button class="option-btn" data-option="B"><span class="option-text"></span></button>
+                    <button class="option-btn" data-option="C"><span class="option-text"></span></button>
+                    <button class="option-btn" data-option="D"><span class="option-text"></span></button>
+                    <button class="option-btn" data-option="E"><span class="option-text"></span></button>
+                </div>
+                <div id="waitingForAnswers" class="waiting-state" style="display: none;">
+                    <p>Cevap Gönderildi! <span id="answeredCount">0</span>/<span id="totalPlayers">0</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div id="resultsScreen" class="screen">
+            <div class="content-card results-card">
+                <h2 id="resultsTitle" class="results-title">Round Results</h2>
+                <div class="king-answer-reveal">
+                    👑 King chose: <span id="kingChoice" class="reveal-answer">...</span>
+                </div>
+                <ul id="scoreboardList" class="scoreboard-list"></ul>
+                <div class="results-actions">
+                    <button id="nextRoundBtn" class="game-btn btn-primary-game">➡️ Next Round</button>
+                    <button id="playAgainBtn" class="game-btn btn-secondary-game" style="display: none;">🔄 Play Again</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <script src="~/js/lobby.js"></script>
+</body>
+</html>
