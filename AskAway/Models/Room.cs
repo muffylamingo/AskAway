@@ -14,5 +14,7 @@
 
         // İlişkiler: Bir odanın içinde birden fazla oyuncu vardır
         public ICollection<Player> Players { get; set; } = new List<Player>();
+
+        public int CurrentRound { get; set; } = 1; // Her oda 1. turdan başlar
     }
 }

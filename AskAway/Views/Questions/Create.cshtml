@@ -20,9 +20,10 @@
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             padding: 40px 20px;
+            padding-top: 60px;
         }
 
         .form-content-card {
@@ -35,7 +36,28 @@
             width: 100%;
             max-width: 750px;
             animation: slideUp 0.6s ease;
+            max-height: 90vh;
+            overflow-y: auto;
         }
+
+            /* Custom scrollbar for form card */
+            .form-content-card::-webkit-scrollbar {
+                width: 10px;
+            }
+
+            .form-content-card::-webkit-scrollbar-track {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 10px;
+            }
+
+            .form-content-card::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 10px;
+            }
+
+                .form-content-card::-webkit-scrollbar-thumb:hover {
+                    background: rgba(255, 255, 255, 0.5);
+                }
 
         .form-title {
             text-align: center;
@@ -90,7 +112,18 @@
             border-radius: 20px;
             margin-bottom: 25px;
             border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+            max-height: 600px;
+            overflow: hidden;
         }
+
+            .options-section.hidden {
+                display: none;
+                max-height: 0;
+                padding: 0;
+                margin: 0;
+                border: none;
+            }
 
         .options-header {
             font-size: 1.2rem;
@@ -134,6 +167,7 @@
             flex-direction: column;
             gap: 15px;
             margin-top: 30px;
+            padding-bottom: 10px;
         }
 
         .validation-message {
@@ -145,8 +179,13 @@
         }
 
         @@media (max-width: 768px) {
+            .form-container {
+                padding-top: 40px;
+            }
+
             .form-content-card {
                 padding: 30px 25px;
+                max-height: 85vh;
             }
 
             .form-title {
@@ -161,6 +200,10 @@
             .option-badge {
                 width: 100%;
                 height: 40px;
+            }
+
+            textarea.game-input {
+                min-height: 100px;
             }
         }
     </style>
@@ -191,69 +234,83 @@
                     <span asp-validation-for="Text" class="validation-message"></span>
                 </div>
 
+                <!-- Question Type -->
+                <div class="form-group">
+                    <label asp-for="QuestionType" class="form-label">
+                        <span class="icon">🎛️</span>
+                        Question Type
+                    </label>
+                    <select asp-for="QuestionType" class="game-input" id="questionTypeSelect">
+                        <option value="0">0 - Klasik Test</option>
+                        <option value="1">1 - Hedef Oyuncu</option>
+                        <option value="2">2 - Yorum / Açık Uçlu</option>
+                    </select>
+                    <span asp-validation-for="QuestionType" class="validation-message"></span>
+                </div>
+
                 <!-- Options Section -->
-                <div class="options-section">
-                    <div class="options-header">
+                <div class="options-section" id="optionsSection">
+                    <div class="options-header" id="optionsHeader">
                         <span>🎯</span>
                         Answer Options
                     </div>
 
                     <!-- Option A -->
-                    <div class="option-group">
+                    <div class="option-group option-row" id="optionRowA">
                         <div class="option-badge">A</div>
                         <div class="option-input">
                             <input asp-for="OptionA"
+                                   id="OptionA"
                                    class="game-input"
-                                   placeholder="Enter option A"
-                                   required />
+                                   placeholder="Enter option A" />
                             <span asp-validation-for="OptionA" class="validation-message"></span>
                         </div>
                     </div>
 
                     <!-- Option B -->
-                    <div class="option-group">
+                    <div class="option-group option-row" id="optionRowB">
                         <div class="option-badge">B</div>
                         <div class="option-input">
                             <input asp-for="OptionB"
+                                   id="OptionB"
                                    class="game-input"
-                                   placeholder="Enter option B"
-                                   required />
+                                   placeholder="Enter option B" />
                             <span asp-validation-for="OptionB" class="validation-message"></span>
                         </div>
                     </div>
 
                     <!-- Option C -->
-                    <div class="option-group">
+                    <div class="option-group option-row" id="optionRowC">
                         <div class="option-badge">C</div>
                         <div class="option-input">
                             <input asp-for="OptionC"
+                                   id="OptionC"
                                    class="game-input"
-                                   placeholder="Enter option C"
-                                   required />
+                                   placeholder="Enter option C" />
                             <span asp-validation-for="OptionC" class="validation-message"></span>
                         </div>
                     </div>
 
                     <!-- Option D -->
-                    <div class="option-group">
+                    <div class="option-group option-row" id="optionRowD">
                         <div class="option-badge">D</div>
                         <div class="option-input">
                             <input asp-for="OptionD"
+                                   id="OptionD"
                                    class="game-input"
-                                   placeholder="Enter option D"
-                                   required />
+                                   placeholder="Enter option D" />
                             <span asp-validation-for="OptionD" class="validation-message"></span>
                         </div>
                     </div>
 
                     <!-- Option E -->
-                    <div class="option-group">
+                    <div class="option-group option-row" id="optionRowE">
                         <div class="option-badge">E</div>
                         <div class="option-input">
                             <input asp-for="OptionE"
+                                   id="OptionE"
                                    class="game-input"
-                                   placeholder="Enter option E"
-                                   required />
+                                   placeholder="Enter option E" />
                             <span asp-validation-for="OptionE" class="validation-message"></span>
                         </div>
                     </div>
@@ -278,6 +335,42 @@
         @{
             await Html.RenderPartialAsync("_ValidationScriptsPartial");
         }
+
+        <script>
+            (function () {
+                const questionTypeSelect = document.getElementById('questionTypeSelect');
+                const optionsSection = document.getElementById('optionsSection');
+                const optionInputIds = ['OptionA', 'OptionB', 'OptionC', 'OptionD', 'OptionE'];
+
+                function updateOptionsVisibility() {
+                    const value = questionTypeSelect.value;
+                    const shouldHide = (value === '1' || value === '2');
+
+                    // Hide/Show the entire options section
+                    if (shouldHide) {
+                        optionsSection.classList.add('hidden');
+                    } else {
+                        optionsSection.classList.remove('hidden');
+                    }
+
+                    // Remove/Add required attribute on all option inputs
+                    optionInputIds.forEach(id => {
+                        const input = document.getElementById(id);
+                        if (input) {
+                            if (shouldHide) {
+                                input.removeAttribute('required');
+                                input.value = '';
+                            } else {
+                                input.setAttribute('required', 'required');
+                            }
+                        }
+                    });
+                }
+
+                questionTypeSelect.addEventListener('change', updateOptionsVisibility);
+                updateOptionsVisibility(); // Initialize on page load
+            })();
+        </script>
     }
 </body>
 </html>

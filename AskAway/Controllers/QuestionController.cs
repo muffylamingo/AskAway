@@ -29,14 +29,30 @@ namespace AskAway.Controllers
 
         // Yeni soruyu kaydeder
         [HttpPost]
+        [ValidateAntiForgeryToken] // Güvenlik önlemi (CSRF ataklarına karşı korur)
         public async Task<IActionResult> Create(Question question)
         {
+            // 🌟 YENİ EKLENEN KISIM: 
+            // Eğer soru tipi 1 (Oyuncu) veya 2 (Yorum) ise, 
+            // A, B, C, D, E şıklarının boş gelmesine izin ver (Hata fırlatma!)
+            if (question.QuestionType == 1 || question.QuestionType == 2)
+            {
+                ModelState.Remove("OptionA");
+                ModelState.Remove("OptionB");
+                ModelState.Remove("OptionC");
+                ModelState.Remove("OptionD");
+                ModelState.Remove("OptionE");
+            }
+
+            // Doğrulama başarılıysa veritabanına kaydet
             if (ModelState.IsValid)
             {
                 _context.Questions.Add(question);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            // Eğer formda hala hata varsa (örn. sorunun metni boşsa) aynı sayfaya geri dön
             return View(question);
         }
 

@@ -66,6 +66,7 @@
                 <div class="king-indicator">👑 <span id="currentKingName">...</span></div>
                 <div class="timer-container"><div id="timerProgress" class="timer-progress"></div></div>
                 <h2 id="questionText" class="question-text">Soru Yükleniyor...</h2>
+
                 <div class="options-container">
                     <button class="option-btn" data-option="A"><span class="option-text"></span></button>
                     <button class="option-btn" data-option="B"><span class="option-text"></span></button>
@@ -73,6 +74,15 @@
                     <button class="option-btn" data-option="D"><span class="option-text"></span></button>
                     <button class="option-btn" data-option="E"><span class="option-text"></span></button>
                 </div>
+
+                <div id="textInputContainer" style="display: none; text-align: center; margin-top: 20px;">
+                    <input type="text" id="openEndedAnswer" class="game-input" placeholder="Cevabını buraya yaz..." maxlength="60">
+                    <button id="submitOpenEndedBtn" class="game-btn btn-primary-game" style="margin-top: 12px;">
+                        <span class="btn-icon">📤</span>
+                        Gönder
+                    </button>
+                </div>
+
                 <div id="waitingForAnswers" class="waiting-state" style="display: none;">
                     <p>Cevap Gönderildi! <span id="answeredCount">0</span>/<span id="totalPlayers">0</span></p>
                 </div>

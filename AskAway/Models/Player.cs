@@ -12,5 +12,7 @@
         // İlişkiler: Her oyuncu bir odadadır
         public int RoomId { get; set; }
         public Room Room { get; set; }
+
+        public int AnswerOrder { get; set; } = 0; // 0: Henüz cevap vermedi, 1: İlk cevaplayan, vb.
     }
 }
