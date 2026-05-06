@@ -13,6 +13,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // 3. SignalR (Gerçek Zamanlý Ýletiþim) servisini ekliyoruz
 builder.Services.AddSignalR();
 
+// Arka plan temizlik servisimizi sisteme kaydediyoruz
+builder.Services.AddHostedService<RoomCleanupService>();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

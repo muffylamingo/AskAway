@@ -98,8 +98,8 @@ namespace AskAway.Hubs
             if (room.Players.Any(p => p.Score >= room.WinningScore))
             {
                 foreach (var p in room.Players) { p.Score = 0; }
-                room.CurrentKingIndex = 0;
                 room.CurrentRound = 1; // Oyun tamamen bittiyse turu da 1'den başlat
+                room.CurrentKingIndex = 0; // İhtiyat olarak sıfırlıyoruz
             }
 
             foreach (var p in room.Players)
@@ -109,12 +109,12 @@ namespace AskAway.Hubs
             }
             await _context.SaveChangesAsync();
 
-            // 2. TEST SORULARI EKLEME (Eğer veritabanı boşsa)
-            // Burası aynı kalabilir, yukarıda konuştuğumuz gibi farklı tiplerde soru ekleyebilirsin.
+            // --- 3. TUR MANTIĞINA GÖRE SORU SEÇİMİ (YENİ MANTIK) ---
+            int playerCount = room.Players.Count;
 
-            // --- 3. TUR MANTIĞINA GÖRE SORU SEÇİMİ (GÜNCELLENEN KISIM) ---
-            // Tur sayısına göre hangi modda olduğumuzu buluyoruz (0, 1 veya 2)
-            int targetMode = (room.CurrentRound - 1) % 3;
+            // Matematik: Herkes bir kez Kral olana kadar mod değişmez! 
+            // Örn 3 oyuncu varsa: Tur 1, 2, 3 -> Mod 0. Tur 4, 5, 6 -> Mod 1.
+            int targetMode = ((room.CurrentRound - 1) / playerCount) % 3;
 
             var question = await _context.Questions
                 .Where(q => q.QuestionType == targetMode)
@@ -127,19 +127,20 @@ namespace AskAway.Hubs
                 question = await _context.Questions.OrderBy(q => Guid.NewGuid()).FirstOrDefaultAsync();
             }
 
-            // --- 4. SIRALI KRAL SEÇİMİ ---
+            // --- 4. SIRALI KRAL SEÇİMİ (YENİ MANTIK) ---
             var playersList = room.Players.OrderBy(p => p.Id).ToList();
-            var king = playersList[room.CurrentKingIndex % playersList.Count];
+
+            // Kral her tur düzenli olarak bir sonraki kişiye geçer
+            var king = playersList[(room.CurrentRound - 1) % playerCount];
 
             // Bir sonraki tur hazırlıkları
-            room.CurrentKingIndex++;
             room.CurrentRound++; // Turu bir artırıyoruz
             room.CurrentState = "Playing";
             room.KingPlayerId = king.Id;
             room.CurrentQuestionId = question.Id;
             await _context.SaveChangesAsync();
 
-            // --- 5. MODA GÖRE ŞIKLARI HAZIRLA (GÜNCELLENEN KISIM) ---
+            // --- 5. MODA GÖRE ŞIKLARI HAZIRLA ---
             object finalOptions;
 
             // Eğer soru tipi 1 ise (Hedef Oyuncu), şıklar odadaki insanların isimleri olmalı
